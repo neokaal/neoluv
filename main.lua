@@ -31,12 +31,31 @@ function love.load()
         statusText:setText(string.format('Slider value: %.0f', value))
     end)
 
-    root = ne0luv.ColumnLayout({ x = 100, y = 100, w = 280, h = 180 }, {
+    local nestedRow = ne0luv.RowLayout({ x = 0, y = 112, w = 280, h = 32 }, {
+        bgColor = { 0.18, 0.18, 0.24, 0.9 }
+    })
+
+    local nestedLabel = ne0luv.Text({ x = 0, y = 0, w = 120, h = 32 }, {
+        text = 'Nested row:'
+    })
+
+    local nestedButton = ne0luv.Button({ x = 0, y = 0, w = 120, h = 32 }, {
+        text = 'Nested button',
+        onActivate = function()
+            statusText:setText('Nested row button activated')
+        end
+    })
+
+    nestedRow:addChild(nestedLabel)
+    nestedRow:addChild(nestedButton)
+
+    root = ne0luv.ColumnLayout({ x = 100, y = 100, w = 280, h = 220 }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
     })
 
     root:addChild(title)
     root:addChild(statusText)
+    root:addChild(nestedRow)
     root:addChild(button)
     root:addChild(slider)
 end

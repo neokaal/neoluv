@@ -105,20 +105,16 @@ end
 function Layout:_mousepressed(x, y, button, istouch, presses)
     -- print("Layout:_mousepressed [" .. x .. ", " .. y .. "]")
     -- Iterate over child components and pass the mousepress event
-    local localX = x - self:getX()
-    local localY = y - self:getY()
     for _, child in ipairs(self.children) do
-        child:mousepressed(localX, localY, button, istouch, presses)
+        child:mousepressed(x, y, button, istouch, presses)
     end
 end
 
 -- Override the mousereleased method
 function Layout:_mousereleased(x, y, button, istouch, presses)
     -- Iterate over child components and pass the mouserelease event
-    local localX = x - self:getX()
-    local localY = y - self:getY()
     for _, child in ipairs(self.children) do
-        child:mousereleased(localX, localY, button, istouch, presses)
+        child:mousereleased(x, y, button, istouch, presses)
     end
 end
 
@@ -126,10 +122,8 @@ end
 function Layout:_mousemoved(x, y, dx, dy, istouch)
     -- print("Layout:_mousemoved [" .. x .. ", " .. y .. "]")
     -- Iterate over child components and pass the mousemove event
-    local localX = x - self:getX()
-    local localY = y - self:getY()
     for _, child in ipairs(self.children) do
-        child:mousemoved(localX, localY, dx, dy, istouch)
+        child:mousemoved(x, y, dx, dy, istouch)
     end
 end
 

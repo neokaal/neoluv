@@ -74,15 +74,12 @@ end
 -- Override the mousepressed method
 function Slider:_mousepressed(x, y, button)
     -- print("Slider:mousepressed [" .. x .. ", " .. y .. "]")
-    local localX = x - self:getX()
-    local localY = y - self:getY()
-
-    if button == 1 and localX >= self.handleX
-        and localX <= self.handleX + self.handleWidth
-        and localY >= 0 and localY <= self.handleHeight then
+    if button == 1 and x >= self.handleX
+        and x <= self.handleX + self.handleWidth
+        and y >= 0 and y <= self.handleHeight then
         self.dragging = true
     else
-        self.handleX = math.max(0, math.min(self:getWidth() - self.handleWidth, localX))
+        self.handleX = math.max(0, math.min(self:getWidth() - self.handleWidth, x))
         self.dragging = false
         self:updateCurrentValue()
     end

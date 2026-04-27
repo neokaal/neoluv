@@ -118,9 +118,27 @@ function Panel:keypressed(key)
     -- Code to handle key press
 end
 
+function Panel:toLocalPoint(x, y)
+    return x - self:getX(), y - self:getY()
+end
+
+function Panel:containsLocalPoint(x, y)
+    if x == nil or y == nil then
+        return false
+    end
+
+    return x >= 0 and x <= self:getWidth()
+        and y >= 0 and y <= self:getHeight()
+end
+
 function Panel:mousepressed(x, y, button, istouch, presses)
-    if self.shown and self.rect:contains(x, y) then
-        self:_mousepressed(x, y, button, istouch, presses)
+    if not self.shown then
+        return
+    end
+
+    local localX, localY = self:toLocalPoint(x, y)
+    if self:containsLocalPoint(localX, localY) then
+        self:_mousepressed(localX, localY, button, istouch, presses)
     end
 end
 
@@ -128,8 +146,13 @@ function Panel:_mousepressed(x, y, button, istouch, presses)
 end
 
 function Panel:mousereleased(x, y, button, istouch, presses)
-    if self.shown and self.rect:contains(x, y) then
-        self:_mousereleased(x, y, button, istouch, presses)
+    if not self.shown then
+        return
+    end
+
+    local localX, localY = self:toLocalPoint(x, y)
+    if self:containsLocalPoint(localX, localY) then
+        self:_mousereleased(localX, localY, button, istouch, presses)
     end
 end
 
@@ -141,8 +164,9 @@ function Panel:mousemoved(x, y, dx, dy, istouch)
         return
     end
 
-    if self.rect:contains(x, y) then
-        self:_mousemoved(x, y, dx, dy, istouch)
+    local localX, localY = self:toLocalPoint(x, y)
+    if self:containsLocalPoint(localX, localY) then
+        self:_mousemoved(localX, localY, dx, dy, istouch)
     else
         self:_mouseout()
     end
