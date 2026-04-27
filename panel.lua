@@ -6,7 +6,7 @@
 --
 -- - A `Panel` owns a `Rect` that defines its position and bounds.
 -- - A `Panel` constructor accepts either a `Rect` instance or a rect
---   specification table with named fields `x`, `y`, `w`, and `h`.
+--   specification table with named fields `w`, `h`, and optional `x`, `y`.
 -- - The `Rect` position and size are accessed through the `Rect`
 --   getter/setter API.
 -- - A `Panel` is visible when `shown == true`.
@@ -16,7 +16,11 @@
 -- - `Panel:_draw()` renders in panel-local coordinates, with the panel's
 --   top-left at `(0, 0)`.
 -- - `Panel` does not apply clipping by default.
--- - Panel bounds are used for hit testing.
+-- - Public mouse handlers accept coordinates in the parent panel's coordinate
+--   space.
+-- - `Panel` converts parent-space mouse coordinates to panel-local
+--   coordinates before calling underscored mouse handlers.
+-- - Panel bounds are used for hit testing in panel-local coordinates.
 -- - `Panel:mousepressed()` forwards to `Panel:_mousepressed()` only when the
 --   press is inside the panel bounds.
 -- - `Panel:mousereleased()` forwards to `Panel:_mousereleased()` only when the
@@ -50,18 +54,18 @@ local function _normalize_rect(rect)
     end
 
     if type(rect) ~= 'table' then
-        error("Panel rect must be a Rect or a table with x, y, w, h", 3)
+        error("Panel rect must be a Rect or a table with w, h, and optional x, y", 3)
     end
 
     if rect.isInstanceOf and rect:isInstanceOf(Rect) then
         return rect
     end
 
-    if rect.x == nil or rect.y == nil or rect.w == nil or rect.h == nil then
-        error("Panel rect table must define x, y, w, and h", 3)
+    if rect.w == nil or rect.h == nil then
+        error("Panel rect table must define w and h", 3)
     end
 
-    return Rect(rect.x, rect.y, rect.w, rect.h)
+    return Rect(rect.x or 0, rect.y or 0, rect.w, rect.h)
 end
 
 -- Define the Panel class
@@ -69,8 +73,9 @@ local Panel = Class('Panel')
 
 --- Create a new panel.
 -- @tparam[opt] Rect|table rect Bounds for the panel. Accepts either a `Rect`
--- instance or a table `{ x = ..., y = ..., w = ..., h = ... }`. Partial rect
--- tables are invalid. Defaults to a 100x100 panel at `(0, 0)`.
+-- instance or a table `{ w = ..., h = ..., x = ..., y = ... }`. `w` and `h`
+-- are required; `x` and `y` default to `0`. Defaults to a 100x100 panel at
+-- `(0, 0)`.
 function Panel:initialize(rect)
     self.rect = _normalize_rect(rect)
     self.parent = nil
@@ -118,10 +123,13 @@ function Panel:keypressed(key)
     -- Code to handle key press
 end
 
+--- Convert a point from parent-space coordinates into panel-local
+-- coordinates.
 function Panel:toLocalPoint(x, y)
     return x - self:getX(), y - self:getY()
 end
 
+--- Return whether a panel-local point is inside the panel bounds.
 function Panel:containsLocalPoint(x, y)
     if x == nil or y == nil then
         return false
