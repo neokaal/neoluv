@@ -30,3 +30,12 @@ Simple utility class that represents a rectangular area initialized with four ar
 - By default, `Panel` does not apply clipping.
 - Mouse callbacks use the panel bounds for hit testing.
 - Hidden panels do not draw and ignore mouse input.
+
+## Layout
+
+- `Layout` is the base container class for layouts.
+- `RowLayout` and `ColumnLayout` are the concrete layout classes intended for direct use.
+- Layouts position child panels in layout-local coordinates.
+- `addChild()` attaches a child panel, sets its parent, and updates the layout.
+- `RowLayout` arranges children horizontally in insertion order.
+- `ColumnLayout` arranges children vertically in insertion order.

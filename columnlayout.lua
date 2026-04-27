@@ -8,8 +8,7 @@ local ColumnLayout = Class('ColumnLayout', Layout)
 
 -- Constructor for the Layout class
 function ColumnLayout:initialize(rect, config)
-    Layout.initialize(self, rect)
-    self.config = config or {}
+    Layout.initialize(self, rect, config)
 end
 
 function ColumnLayout:reflow()

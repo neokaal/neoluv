@@ -8,8 +8,7 @@ local RowLayout = Class('RowLayout', Layout)
 
 -- Constructor for the Layout class
 function RowLayout:initialize(rect, config)
-    Layout.initialize(self, rect)
-    self.config = config or {}
+    Layout.initialize(self, rect, config)
 end
 
 function RowLayout:reflow()
