@@ -10,18 +10,18 @@ function love.load()
         text = 'Panel local coordinates demo'
     })
 
-    statusText = ne0luv.Text({ x = 0, y = 32, w = 280, h = 24 }, {
+    statusText = ne0luv.Text({ x = 0, y = 0, w = 280, h = 24 }, {
         text = 'Click the button or drag the slider'
     })
 
-    local button = ne0luv.Button({ x = 0, y = 64, w = 180, h = 32 }, {
+    local button = ne0luv.Button({ x = 0, y = 0, w = 180, h = 32 }, {
         text = 'Activate',
         onActivate = function()
             statusText:setText('Button activated')
         end
     })
 
-    local slider = ne0luv.Slider({ x = 0, y = 112, w = 220, h = 24 }, {
+    local slider = ne0luv.Slider({ x = 0, y = 0, w = 220, h = 24 }, {
         minValue = 0,
         maxValue = 100,
         currentValue = 25
