@@ -5,6 +5,8 @@ local statusText
 
 function love.load()
     love.window.setTitle('ne0luv panel refactor playground')
+    local w, h
+    w, h = love.graphics.getDimensions()
 
     local title = ne0luv.Text({ w = 280, h = 24 }, {
         text = 'Panel local coordinates demo'
@@ -49,7 +51,7 @@ function love.load()
     nestedRow:addChild(nestedLabel)
     nestedRow:addChild(nestedButton)
 
-    root = ne0luv.ColumnLayout({ x = 100, y = 100, w = 280, h = 220 }, {
+    root = ne0luv.ColumnLayout({ x = 0, y = 0, w = w, h = h }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
     })
 
