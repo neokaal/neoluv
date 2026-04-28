@@ -62,7 +62,7 @@ local function _normalize_layout_config(layoutConfig)
         return layoutConfig
     end
 
-    local position = layoutConfig.position
+    local position = layoutConfig.position or { x = 0, y = 0 }
     local size = layoutConfig.size
 
     if type(position) ~= 'table' then

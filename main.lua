@@ -9,21 +9,18 @@ function love.load()
     w, h = love.graphics.getDimensions()
 
     local title = ne0luv.Text({
-        position = { x = 0, y = 0 },
         size = { w = 280, h = 24 },
     }, {
         text = 'Panel local coordinates demo'
     })
 
     statusText = ne0luv.Text({
-        position = { x = 0, y = 0 },
         size = { w = 280, h = 24 },
     }, {
         text = 'Click the button or drag the slider'
     })
 
     local button = ne0luv.Button({
-        position = { x = 0, y = 0 },
         size = { w = 180, h = 32 },
     }, {
         text = 'Activate',
@@ -33,7 +30,6 @@ function love.load()
     })
 
     local slider = ne0luv.Slider({
-        position = { x = 0, y = 0 },
         size = { w = 220, h = 24 },
     }, {
         minValue = 0,
@@ -46,21 +42,18 @@ function love.load()
     end)
 
     local nestedRow = ne0luv.RowLayout({
-        position = { x = 0, y = 0 },
         size = { w = 280, h = 32 },
     }, {
         bgColor = { 0.18, 0.18, 0.24, 0.9 }
     })
 
     local nestedLabel = ne0luv.Text({
-        position = { x = 0, y = 0 },
         size = { w = 120, h = 32 },
     }, {
         text = 'Nested row:'
     })
 
     local nestedButton = ne0luv.Button({
-        position = { x = 0, y = 0 },
         size = { w = 120, h = 32 },
     }, {
         text = 'Nested button',
@@ -73,7 +66,6 @@ function love.load()
     nestedRow:addChild(nestedButton)
 
     root = ne0luv.ColumnLayout({
-        position = { x = 0, y = 0 },
         size = { w = w, h = h },
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
