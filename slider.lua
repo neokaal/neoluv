@@ -15,22 +15,24 @@ function Slider:initialize(layoutConfig, displayConfig)
     self.maxValue = self.displayConfig.maxValue or 100                   -- Default maxValue is 100
     self.currentValue = self.displayConfig.currentValue or self.minValue -- Default currentValue is minValue
     self.handleWidth = 10                                                -- Width of the handle
-    self.handleHeight = self:getInnerHeight()                            -- Height of the handle
+    self.handleHeight = self:getCanvasRect():getHeight()                 -- Height of the handle
     self.handleX = self:calculateHandlePosition()                        -- Local X position of the handle
     self.changeHandler = {}
 end
 
 -- Method to calculate the handle position based on the current value
 function Slider:calculateHandlePosition()
+    local canvasRect = self:getCanvasRect()
     local range = self.maxValue - self.minValue
     local fraction = (self.currentValue - self.minValue) / range
-    return fraction * (self:getInnerWidth() - self.handleWidth)
+    return fraction * (canvasRect:getWidth() - self.handleWidth)
 end
 
 -- Method to update the current value based on the handle position
 function Slider:updateCurrentValue()
+    local canvasRect = self:getCanvasRect()
     local range = self.maxValue - self.minValue
-    local fraction = self.handleX / (self:getInnerWidth() - self.handleWidth)
+    local fraction = self.handleX / (canvasRect:getWidth() - self.handleWidth)
     self.currentValue = self.minValue + fraction * range
     -- self.currentValue = math.floor(self.currentValue + 0.5)
     self:fireChangeHandlers()
@@ -58,6 +60,7 @@ end
 
 -- Override the draw method
 function Slider:_draw()
+    local canvasRect = self:getCanvasRect()
     if self.dragging then
         love.graphics.setColor(0.5, 0.5, 0.5, 1)
     else
@@ -65,7 +68,10 @@ function Slider:_draw()
     end
 
     -- Draw the line
-    love.graphics.line(0, self:getInnerHeight() / 2, self:getInnerWidth(), self:getInnerHeight() / 2)
+    love.graphics.line(
+        0, canvasRect:getHeight() / 2,
+        canvasRect:getWidth(), canvasRect:getHeight() / 2
+    )
 
     -- Draw the handle
     love.graphics.rectangle('fill', self.handleX, 0, self.handleWidth, self.handleHeight)
@@ -73,13 +79,14 @@ end
 
 -- Override the mousepressed method
 function Slider:_mousepressed(x, y, button)
+    local canvasRect = self:getCanvasRect()
     -- print("Slider:mousepressed [" .. x .. ", " .. y .. "]")
     if button == 1 and x >= self.handleX
         and x <= self.handleX + self.handleWidth
         and y >= 0 and y <= self.handleHeight then
         self.dragging = true
     else
-        self.handleX = math.max(0, math.min(self:getInnerWidth() - self.handleWidth, x))
+        self.handleX = math.max(0, math.min(canvasRect:getWidth() - self.handleWidth, x))
         self.dragging = false
         self:updateCurrentValue()
     end
@@ -87,11 +94,12 @@ end
 
 -- Override the mousemoved method
 function Slider:_mousemoved(x, y, dx, dy)
+    local canvasRect = self:getCanvasRect()
     -- print("Slider:mousemoved")
     if self.dragging then
         self.handleX = self.handleX + dx
         self.handleX = math.max(0,
-            math.min(self:getInnerWidth() - self.handleWidth, self.handleX))
+            math.min(canvasRect:getWidth() - self.handleWidth, self.handleX))
         self:updateCurrentValue()
     end
 end

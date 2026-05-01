@@ -76,9 +76,10 @@ end
 
 -- Override the _draw method
 function Layout:_draw()
+    local canvasRect = self:getCanvasRect()
     -- Draw the background
     love.graphics.setColor(self.bgColor)
-    love.graphics.rectangle('fill', 0, 0, self:getInnerWidth(), self:getInnerHeight())
+    love.graphics.rectangle('fill', 0, 0, canvasRect:getWidth(), canvasRect:getHeight())
     -- Iterate over child components and draw them
     for _, child in ipairs(self.children) do
         child:draw()

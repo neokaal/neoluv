@@ -36,9 +36,10 @@ end
 
 -- Override the draw method
 function Text:_draw()
+    local canvasRect = self:getCanvasRect()
     love.graphics.setColor(self.fgColor)
     love.graphics.setFont(self.font)
-    love.graphics.printf(self.displayText, 0, 0, self:getInnerWidth(), self.align)
+    love.graphics.printf(self.displayText, 0, 0, canvasRect:getWidth(), self.align)
 end
 
 return Text

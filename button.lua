@@ -55,6 +55,7 @@ end
 
 --- draw the button
 function Button:_draw()
+    local canvasRect = self:getCanvasRect()
     local bgColor, fgColor
     if self:isSelected() then
         bgColor = self.colors.bgSelect
@@ -64,10 +65,10 @@ function Button:_draw()
         fgColor = self.colors.fg
     end
     love.graphics.setColor(bgColor)
-    love.graphics.rectangle('fill', 0, 0, self:getInnerWidth(), self:getInnerHeight())
+    love.graphics.rectangle('fill', 0, 0, canvasRect:getWidth(), canvasRect:getHeight())
     love.graphics.setColor(fgColor)
     love.graphics.setFont(self.font)
-    love.graphics.printf(self.displayText, 0, 0, self:getInnerWidth(), self.align)
+    love.graphics.printf(self.displayText, 0, 0, canvasRect:getWidth(), self.align)
 end
 
 function Button:_mouseout()
