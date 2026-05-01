@@ -14,9 +14,9 @@ function Slider:initialize(layoutConfig, displayConfig)
     self.minValue = self.displayConfig.minValue or 0                     -- Default minValue is 0
     self.maxValue = self.displayConfig.maxValue or 100                   -- Default maxValue is 100
     self.currentValue = self.displayConfig.currentValue or self.minValue -- Default currentValue is minValue
-    self.handleWidth = 10                                         -- Width of the handle
-    self.handleHeight = self:getHeight()                          -- Height of the handle
-    self.handleX = self:calculateHandlePosition()                 -- Local X position of the handle
+    self.handleWidth = 10                                                -- Width of the handle
+    self.handleHeight = self:getInnerHeight()                            -- Height of the handle
+    self.handleX = self:calculateHandlePosition()                        -- Local X position of the handle
     self.changeHandler = {}
 end
 
@@ -24,13 +24,13 @@ end
 function Slider:calculateHandlePosition()
     local range = self.maxValue - self.minValue
     local fraction = (self.currentValue - self.minValue) / range
-    return fraction * (self:getWidth() - self.handleWidth)
+    return fraction * (self:getInnerWidth() - self.handleWidth)
 end
 
 -- Method to update the current value based on the handle position
 function Slider:updateCurrentValue()
     local range = self.maxValue - self.minValue
-    local fraction = self.handleX / (self:getWidth() - self.handleWidth)
+    local fraction = self.handleX / (self:getInnerWidth() - self.handleWidth)
     self.currentValue = self.minValue + fraction * range
     -- self.currentValue = math.floor(self.currentValue + 0.5)
     self:fireChangeHandlers()
@@ -65,7 +65,7 @@ function Slider:_draw()
     end
 
     -- Draw the line
-    love.graphics.line(0, self:getHeight() / 2, self:getWidth(), self:getHeight() / 2)
+    love.graphics.line(0, self:getInnerHeight() / 2, self:getInnerWidth(), self:getInnerHeight() / 2)
 
     -- Draw the handle
     love.graphics.rectangle('fill', self.handleX, 0, self.handleWidth, self.handleHeight)
@@ -79,7 +79,7 @@ function Slider:_mousepressed(x, y, button)
         and y >= 0 and y <= self.handleHeight then
         self.dragging = true
     else
-        self.handleX = math.max(0, math.min(self:getWidth() - self.handleWidth, x))
+        self.handleX = math.max(0, math.min(self:getInnerWidth() - self.handleWidth, x))
         self.dragging = false
         self:updateCurrentValue()
     end
@@ -91,7 +91,7 @@ function Slider:_mousemoved(x, y, dx, dy)
     if self.dragging then
         self.handleX = self.handleX + dx
         self.handleX = math.max(0,
-            math.min(self:getWidth() - self.handleWidth, self.handleX))
+            math.min(self:getInnerWidth() - self.handleWidth, self.handleX))
         self:updateCurrentValue()
     end
 end

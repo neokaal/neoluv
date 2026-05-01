@@ -84,6 +84,29 @@ local function _normalize_layout_config(layoutConfig)
     return Rect(position.x, position.y, size.w, size.h)
 end
 
+
+local Quad = Class('Quad')
+
+function Quad.static:normalize_quad(layoutConfig, attr)
+    local value = Quad(0)
+    if (layoutConfig and layoutConfig[attr]
+            and type(layoutConfig[attr]) == "number") then
+        value = Quad(layoutConfig[attr])
+    end
+    if (layoutConfig and layoutConfig[attr]
+            and type(layoutConfig[attr]) == "table") then
+        value = Quad(unpack(layoutConfig[attr]))
+    end
+    return value
+end
+
+function Quad:initialize(n, e, s, w)
+    self.n = n or 0
+    self.e = e or self.n
+    self.w = w or self.e
+    self.s = s or self.n
+end
+
 -- Define the Panel class
 local Panel = Class('Panel')
 
@@ -96,7 +119,17 @@ local Panel = Class('Panel')
 -- subclasses.
 function Panel:initialize(layoutConfig, displayConfig)
     self.rect = _normalize_layout_config(layoutConfig)
+    self.margin = Quad:normalize_quad(layoutConfig, 'margin')
+    self.border = Quad:normalize_quad(layoutConfig, 'border')
+    self.padding = Quad:normalize_quad(layoutConfig, 'padding')
+
     self.displayConfig = displayConfig or {}
+    if not self.displayConfig.borderColor then
+        self.displayConfig.borderColor = { 0, 0, 0, 1 }
+    end
+    if not self.displayConfig.bgColor then
+        self.displayConfig.bgColor = { 0, 0, 0, 0.1 }
+    end
     self.parent = nil
     self.shown = true
 end
@@ -128,14 +161,54 @@ end
 function Panel:draw()
     if self.shown then
         love.graphics.push()
+
+        -- translate to window position
         love.graphics.translate(self:getX(), self:getY())
+        love.graphics.setColor({ 1, 1, 1, 0.4 })
+        love.graphics.rectangle('fill', 0, 0, self:getWidth(), self:getHeight())
+
+        -- translate to the position plus the margin
+        love.graphics.translate(self.margin.w, self.margin.n)
+
+        -- draw the border
+        love.graphics.setColor(self.displayConfig.borderColor)
+        -- north border
+        love.graphics.rectangle('fill',
+            0, 0,
+            self:getWidth() - self.margin.w - self.margin.e - self.border.e, self.border.n)
+        -- east border
+        love.graphics.rectangle('fill',
+            self:getWidth() - self.margin.w - self.margin.e - self.border.e, 0,
+            self.border.e, self:getHeight() - self.margin.n - self.margin.s)
+        -- -- west border
+        love.graphics.rectangle('fill',
+            0, 0,
+            self.border.w, self:getHeight() - self.margin.n - self.margin.s)
+        -- -- south border
+        love.graphics.rectangle('fill',
+            0, self:getHeight() - self.margin.n - self.margin.s - self.border.s,
+            self:getWidth() - self.margin.e - self.margin.w - self.border.e, self.border.s)
+
+        -- translate by the border
+        love.graphics.translate(self.border.w, self.border.n)
+
+        -- draw the background in the inner drawing area
+        love.graphics.setColor(self.displayConfig.bgColor)
+        love.graphics.rectangle('fill', 0, 0, self:getInnerWidth() + self.padding.w + self.padding.e,
+            self:getInnerHeight() + self.padding.n + self.padding.s)
+
+        -- translate by the padding
+        love.graphics.translate(self.padding.w, self.padding.n)
+
+        -- call the content drawing
         self:_draw()
+
         love.graphics.pop()
     end
 end
 
+--- Code to draw the panel
 function Panel:_draw()
-    -- Code to draw the panel
 end
 
 function Panel:keypressed(key)
@@ -145,7 +218,8 @@ end
 --- Convert a point from parent-space coordinates into panel-local
 -- coordinates.
 function Panel:toLocalPoint(x, y)
-    return x - self:getX(), y - self:getY()
+    return x - self:getX() - self.margin.w - self.border.w - self.padding.w,
+        y - self:getY() - self.margin.n - self.border.n - self.padding.n
 end
 
 --- Return whether a panel-local point is inside the panel bounds.
@@ -154,8 +228,8 @@ function Panel:containsLocalPoint(x, y)
         return false
     end
 
-    return x >= 0 and x <= self:getWidth()
-        and y >= 0 and y <= self:getHeight()
+    return x >= 0 and x <= self:getInnerWidth()
+        and y >= 0 and y <= self:getInnerHeight()
 end
 
 function Panel:mousepressed(x, y, button, istouch, presses)
@@ -209,8 +283,26 @@ function Panel:getWidth()
     return self.rect:getWidth()
 end
 
+function Panel:getInnerWidth()
+    return (
+        self:getWidth()
+        - self.margin.e - self.margin.w
+        - self.border.e - self.border.w
+        - self.padding.e - self.padding.w
+    )
+end
+
 function Panel:getHeight()
     return self.rect:getHeight()
+end
+
+function Panel:getInnerHeight()
+    return (
+        self:getHeight()
+        - self.margin.n - self.margin.s
+        - self.border.n - self.border.s
+        - self.padding.n - self.padding.s
+    )
 end
 
 function Panel:getX()
@@ -227,6 +319,30 @@ end
 
 function Panel:setY(y)
     self.rect:setY(y)
+end
+
+function Panel:setMargin(n, e, s, w)
+    self.margin = Quad(n, e, s, w)
+end
+
+function Panel:getMargin()
+    return self.margin
+end
+
+function Panel:setBorder(n, e, s, w)
+    self.border = Quad(n, e, s, w)
+end
+
+function Panel:getBorder()
+    return self.border
+end
+
+function Panel:setPadding(n, e, s, w)
+    self.padding = Quad(n, e, s, w)
+end
+
+function Panel:getPadding()
+    return self.padding
 end
 
 return Panel

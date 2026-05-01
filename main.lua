@@ -9,19 +9,29 @@ function love.load()
     w, h = love.graphics.getDimensions()
 
     local title = ne0luv.Text({
-        size = { w = 280, h = 24 },
+        size = { w = 280, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
     }, {
-        text = 'Panel local coordinates demo'
+        text = 'Panel local coordinates demo',
+        borderColor = { 0, 0, 0, 1 }
     })
 
     statusText = ne0luv.Text({
         size = { w = 280, h = 24 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
     }, {
         text = 'Click the button or drag the slider'
     })
 
     local button = ne0luv.Button({
         size = { w = 180, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
     }, {
         text = 'Activate',
         onActivate = function()
@@ -31,6 +41,9 @@ function love.load()
 
     local slider = ne0luv.Slider({
         size = { w = 220, h = 24 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
     }, {
         minValue = 0,
         maxValue = 100,
@@ -49,12 +62,18 @@ function love.load()
 
     local nestedLabel = ne0luv.Text({
         size = { w = 120, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
     }, {
         text = 'Nested row:'
     })
 
     local nestedButton = ne0luv.Button({
         size = { w = 120, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
     }, {
         text = 'Nested button',
         onActivate = function()
@@ -64,6 +83,16 @@ function love.load()
 
     nestedRow:addChild(nestedLabel)
     nestedRow:addChild(nestedButton)
+
+    local panelWithBorder = ne0luv.Panel({
+        size = { w = 100, h = 100 },
+        margin = { 2, 4 },
+        border = { 3, 6 },
+        padding = { 4, 8 }
+    }, {
+        borderColor = { 1, 0, 0, 1 },
+        bgColor = { 0, 1, 0, 1 }
+    })
 
     root = ne0luv.ColumnLayout({
         size = { w = w, h = h },
@@ -76,6 +105,7 @@ function love.load()
     root:addChild(nestedRow)
     root:addChild(button)
     root:addChild(slider)
+    root:addChild(panelWithBorder)
 end
 
 function love.update(dt)

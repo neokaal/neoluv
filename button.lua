@@ -64,10 +64,10 @@ function Button:_draw()
         fgColor = self.colors.fg
     end
     love.graphics.setColor(bgColor)
-    love.graphics.rectangle('fill', 0, 0, self:getWidth(), self:getHeight())
+    love.graphics.rectangle('fill', 0, 0, self:getInnerWidth(), self:getInnerHeight())
     love.graphics.setColor(fgColor)
     love.graphics.setFont(self.font)
-    love.graphics.printf(self.displayText, 0, 0, self:getWidth(), self.align)
+    love.graphics.printf(self.displayText, 0, 0, self:getInnerWidth(), self.align)
 end
 
 function Button:_mouseout()

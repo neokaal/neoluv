@@ -78,7 +78,7 @@ end
 function Layout:_draw()
     -- Draw the background
     love.graphics.setColor(self.bgColor)
-    love.graphics.rectangle('fill', 0, 0, self:getWidth(), self:getHeight())
+    love.graphics.rectangle('fill', 0, 0, self:getInnerWidth(), self:getInnerHeight())
     -- Iterate over child components and draw them
     for _, child in ipairs(self.children) do
         child:draw()
