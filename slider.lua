@@ -11,12 +11,19 @@ local Slider = Class('Slider', Panel)
 function Slider:initialize(layoutConfig, displayConfig)
     Panel.initialize(self, layoutConfig, displayConfig)
     self.displayConfig = displayConfig or {}
-    self.minValue = self.displayConfig.minValue or 0                     -- Default minValue is 0
-    self.maxValue = self.displayConfig.maxValue or 100                   -- Default maxValue is 100
-    self.currentValue = self.displayConfig.currentValue or self.minValue -- Default currentValue is minValue
-    self.handleWidth = 10                                                -- Width of the handle
-    self.handleHeight = self:getCanvasRect():getHeight()                 -- Height of the handle
-    self.handleX = self:calculateHandlePosition()                        -- Local X position of the handle
+    -- Default minValue is 0
+    self.minValue = self.displayConfig.minValue or 0
+    -- Default maxValue is 100
+    self.maxValue = self.displayConfig.maxValue or 100
+    -- Default currentValue is minValue
+    self.currentValue = self.displayConfig.currentValue or self.minValue
+    -- Default text color is white
+    self.fgColor = self.displayConfig.fgColor or { 1, 1, 1, 1 }
+    self.handleColor = self.displayConfig.handleColor or { 0.8, 0.8, 0.8, 1 }
+    self.activeColor = self.displayConfig.activeColor or { 0.5, 0.5, 0.5, 1 }
+    self.handleWidth = 10                                -- Width of the handle
+    self.handleHeight = self:getCanvasRect():getHeight() -- Height of the handle
+    self.handleX = self:calculateHandlePosition()        -- Local X position of the handle
     self.changeHandler = {}
 end
 
@@ -61,19 +68,20 @@ end
 -- Override the draw method
 function Slider:_draw()
     local canvasRect = self:getCanvasRect()
-    if self.dragging then
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-    else
-        love.graphics.setColor(0.8, 0.8, 0.8, 1)
-    end
 
     -- Draw the line
+    love.graphics.setColor(self.fgColor)
     love.graphics.line(
         0, canvasRect:getHeight() / 2,
         canvasRect:getWidth(), canvasRect:getHeight() / 2
     )
 
     -- Draw the handle
+    if self.dragging then
+        love.graphics.setColor(self.activeColor)
+    else
+        love.graphics.setColor(self.handleColor)
+    end
     love.graphics.rectangle('fill', self.handleX, 0, self.handleWidth, self.handleHeight)
 end
 
