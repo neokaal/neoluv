@@ -169,12 +169,14 @@ function Panel:draw()
 
         -- translate to window position
         love.graphics.translate(self:getX(), self:getY())
-        love.graphics.setColor({ 1, 1, 1, 0.4 })
-        love.graphics.rectangle(
-            'fill',
-            outerRect:getX(), outerRect:getY(),
-            outerRect:getWidth(), outerRect:getHeight()
-        )
+
+        -- DEBUG: this fill is only for debugging
+        -- love.graphics.setColor({ 1, 1, 1, 0.4 })
+        -- love.graphics.rectangle(
+        --     'fill',
+        --     outerRect:getX(), outerRect:getY(),
+        --     outerRect:getWidth(), outerRect:getHeight()
+        -- )
 
         -- draw the border
         love.graphics.setColor(self.displayConfig.borderColor)
