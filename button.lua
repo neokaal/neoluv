@@ -36,6 +36,10 @@ function Button:initialize(layoutConfig, displayConfig)
     }
     self.colors.bgSelect = self.colors.bgSelect or { 0.35, 0.35, 0.35, 1 }
     self.colors.fgSelect = self.colors.fgSelect or self.colors.fg
+
+    -- state
+    self.enabled = true
+    self.down = false
 end
 
 function Button:toggleSelect()
@@ -64,6 +68,11 @@ function Button:_draw()
         bgColor = self.colors.bg
         fgColor = self.colors.fg
     end
+    if self.down then
+        local temp = bgColor
+        bgColor = fgColor
+        fgColor = temp
+    end
     love.graphics.setColor(bgColor)
     love.graphics.rectangle('fill', 0, 0, canvasRect:getWidth(), canvasRect:getHeight())
     love.graphics.setColor(fgColor)
@@ -81,6 +90,11 @@ end
 
 function Button:_mousepressed(x, y, button, istouch, presses)
     self.onActivate()
+    self.down = true
+end
+
+function Panel:_mousereleased(x, y, button, istouch, presses)
+    self.down = false
 end
 
 return Button
