@@ -104,7 +104,9 @@ function Button:_mousepressed(x, y, button, istouch, presses)
 end
 
 function Button:_mousereleased(x, y, button, istouch, presses)
-    self.onActivate()
+    if self:isEnabled() then
+        self.onActivate()
+    end
     self.down = false
 end
 
