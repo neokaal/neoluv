@@ -38,7 +38,7 @@ function Button:initialize(layoutConfig, displayConfig)
     self.colors.fgSelect = self.colors.fgSelect or self.colors.fg
 
     -- state
-    self.enabled = true
+    self.enabled = self.displayConfig.enabled or true
     self.down = false
 end
 
@@ -55,6 +55,17 @@ function Button:setSelected(selected)
         selected = true
     end
     self.select = selected
+end
+
+function Button:setEnabled(enabled)
+    self.enabled = enabled and true or false
+    if not self.enabled then
+        self:setSelected(false)
+    end
+end
+
+function Button:isEnabled()
+    return self.enabled
 end
 
 --- draw the button
@@ -93,7 +104,7 @@ function Button:_mousepressed(x, y, button, istouch, presses)
     self.down = true
 end
 
-function Panel:_mousereleased(x, y, button, istouch, presses)
+function Button:_mousereleased(x, y, button, istouch, presses)
     self.down = false
 end
 
