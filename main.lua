@@ -81,7 +81,6 @@ function love.load()
         onActivate = function()
             statusText:setText('Image button activated')
         end,
-        bgColor = { 1, 1, 1, 1 }
     })
 
     local nestedButton = ne0luv.Button({

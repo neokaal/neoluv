@@ -19,6 +19,10 @@ function ImageButton:initialize(layoutConfig, displayConfig)
 end
 
 function ImageButton:_draw()
+    love.graphics.push()
+    -- set white colour before drawing image to avoid the tint of the
+    -- background colour
+    love.graphics.setColor({ 1, 1, 1, 1 })
     if not self.enabled then
         love.graphics.draw(self.images.image, self.images.disabled, 0, 0)
     elseif self.down then
@@ -28,6 +32,7 @@ function ImageButton:_draw()
     else
         love.graphics.draw(self.images.image, self.images.normal, 0, 0)
     end
+    love.graphics.pop()
 end
 
 function ImageButton:_mousereleased(x, y, button, istouch, presses)
