@@ -144,3 +144,11 @@ end
 function love.mousemoved(x, y, dx, dy, istouch)
     root:mousemoved(x, y, dx, dy, istouch)
 end
+
+function love.keypressed(key)
+    -- exit the application when escape is pressed
+    if key == "escape" then
+        love.event.quit()
+    end
+    root:keypressed(key)
+end
