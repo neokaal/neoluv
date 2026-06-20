@@ -128,6 +128,51 @@ local function createSlider()
     return ctr
 end
 
+local function createImageButton()
+    local statusText = neoluv.Text({
+        size = { w = 280, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
+    }, {
+        text = '',
+        borderColor = { 0, 0, 0, 1 }
+    })
+    local imgBtnPng = love.graphics.newImage('assets/images/img-button.png')
+    local nestedImgButton = neoluv.ImageButton({
+        size = { w = 64, h = 32 },
+    }, {
+        image = imgBtnPng,
+        normal = love.graphics.newQuad(0, 0, 64, 32, imgBtnPng),
+        disabled = love.graphics.newQuad(64, 0, 64, 32, imgBtnPng),
+        hover = love.graphics.newQuad(128, 0, 64, 32, imgBtnPng),
+        down = love.graphics.newQuad(192, 0, 64, 32, imgBtnPng),
+        onActivate = function()
+            statusText:setText('Image button activated')
+        end,
+    })
+    local ctr = neoluv.RowLayout({
+        size = { w = sampleContainerPanel:getWidth(), h = sampleContainerPanel:getHeight() },
+    }, {
+        bgColor = { 0.1, 0.1, 0.1, 0.85 }
+    })
+    ctr:addChild(statusText)
+    ctr:addChild(nestedImgButton)
+    return ctr
+end
+
+local function createPanelWithBorderMarginPadding()
+    return neoluv.Panel({
+        size = { w = 100, h = 100 },
+        margin = { 4, 8 },
+        border = { 3, 6 },
+        padding = { 4, 8 }
+    }, {
+        borderColor = { 1, 0, 0, 1 },
+        bgColor = { 0, 1, 0, 1 }
+    })
+end
+
 function love.load()
     w, h = love.graphics.getDimensions()
     root = neoluv.RowLayout({
@@ -143,7 +188,9 @@ function love.load()
 
     addSample(createTextLabel(), "Text Label")
     addSample(createButton(), "Simple Button")
+    addSample(createImageButton(), "Image Button")
     addSample(createSlider(), "Simple Slider")
+    addSample(createPanelWithBorderMarginPadding(), "Border/Margin/Padding")
 end
 
 function love.update(dt)
@@ -172,71 +219,4 @@ function love.keypressed(key)
         love.event.quit()
     end
     root:keypressed(key)
-end
-
-local function createDefaultDemoPanel()
-    local nestedRow = neoluv.RowLayout({
-        size = { w = 500, h = 32 },
-    }, {
-        bgColor = { 0.18, 0.18, 0.24, 0.9 }
-    })
-
-    local nestedLabel = neoluv.Text({
-        size = { w = 120, h = 32 },
-        margin = { 2, 10 },
-        border = 1,
-        padding = 2
-    }, {
-        text = 'Nested row:'
-    })
-
-    local imgBtnPng = love.graphics.newImage('assets/images/img-button.png')
-    local nestedImgButton = neoluv.ImageButton({
-        size = { w = 64, h = 32 },
-    }, {
-        image = imgBtnPng,
-        normal = love.graphics.newQuad(0, 0, 64, 32, imgBtnPng),
-        disabled = love.graphics.newQuad(64, 0, 64, 32, imgBtnPng),
-        hover = love.graphics.newQuad(128, 0, 64, 32, imgBtnPng),
-        down = love.graphics.newQuad(192, 0, 64, 32, imgBtnPng),
-        onActivate = function()
-            statusText:setText('Image button activated')
-        end,
-    })
-
-    local nestedButton = neoluv.Button({
-        size = { w = 120, h = 32 },
-        margin = { 2, 10 },
-        border = 1,
-        padding = 2
-    }, {
-        text = 'Nested button',
-        onActivate = function()
-            statusText:setText('image button toggled')
-            nestedImgButton:setEnabled(not nestedImgButton:isEnabled())
-        end
-    })
-
-    nestedRow:addChild(nestedLabel)
-    nestedRow:addChild(nestedButton)
-    nestedRow:addChild(nestedImgButton)
-
-    local panelWithBorder = neoluv.Panel({
-        size = { w = 100, h = 100 },
-        margin = { 2, 4 },
-        border = { 3, 6 },
-        padding = { 4, 8 }
-    }, {
-        borderColor = { 1, 0, 0, 1 },
-        bgColor = { 0, 1, 0, 1 }
-    })
-
-    root = neoluv.ColumnLayout({
-        size = { w = w, h = h },
-    }, {
-        bgColor = { 0.1, 0.1, 0.1, 0.85 }
-    })
-
-    root:addChild(nestedRow)
-    root:addChild(panelWithBorder)
 end
