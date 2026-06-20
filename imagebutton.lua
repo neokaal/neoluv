@@ -1,6 +1,4 @@
---- Button class
-local module_name = ...
-local root = module_name:match("^(.*)%.[^.]+$")
+local root = (...):match("^(.*)%.[^.]+$")
 
 local Class = require(root .. '.middleclass')
 local Button = require(root .. '.button')

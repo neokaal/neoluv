@@ -2,8 +2,7 @@
 -- `Layout` defines the layout as a container of UI components
 --
 -- @classmod Layout
-local module_name = ...
-local root = module_name:match("^(.*)%.[^.]+$")
+local root = (...):match("^(.*)%.[^.]+$")
 
 local Class = require(root .. '.middleclass')
 local Panel = require(root .. '.panel')

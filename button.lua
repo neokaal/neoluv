@@ -4,8 +4,7 @@
 -- author: Abhishek Mishra
 
 --- Button class
-local module_name = ...
-local root = module_name:match("^(.*)%.[^.]+$")
+local root = (...):match("^(.*)%.[^.]+$")
 
 local Class = require(root .. '.middleclass')
 local Panel = require(root .. '.panel')

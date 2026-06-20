@@ -6,8 +6,7 @@ The Vector implementation provides just one public export, the Vector class. Thi
 The next section describes the implementation, then we provide a few sample usages of the Vector API. The final sections list any future plans, current limitations, known issues etc.
 --]]
 
-local module_name = ...
-local root = module_name:match("^(.*)%.[^.]+$")
+local root = (...):match("^(.*)%.[^.]+$")
 
 local Class = require(root .. '.middleclass')
 
