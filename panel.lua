@@ -131,6 +131,9 @@ function Panel:initialize(layoutConfig, displayConfig)
     end
     self.parent = nil
     self.shown = true
+
+    -- Initialize an empty table for child components
+    self.children = {}
 end
 
 function Panel:setParent(parent)
@@ -139,6 +142,26 @@ end
 
 function Panel:getParent()
     return self.parent
+end
+
+function Panel:addChild(c)
+    table.insert(self.children, c)
+
+    -- Set the parent of the child to this layout
+    c:setParent(self)
+end
+
+function Panel:removeChild(c)
+    if c == nil then return end
+    local idx = nil
+    for k, v in ipairs(self.children) do
+        if v == c then
+            idx = k
+        end
+    end
+    if idx ~= nil then
+        table.remove(self.children, idx)
+    end
 end
 
 -- Lifecycle methods

@@ -18,17 +18,16 @@ function Layout:initialize(layoutConfig, displayConfig)
     -- self.layout = self.displayConfig.layout or 'row'
     -- Default fill color is black
     self.bgColor = self.displayConfig.bgColor or { 0, 0, 0, 1 }
-    -- Initialize an empty table for child components
-    self.children = {}
 end
 
 -- Method to add a child component
 function Layout:addChild(c)
-    table.insert(self.children, c)
+    Panel.addChild(self, c)
+    self:reflow()
+end
 
-    -- Set the parent of the child to this layout
-    c:setParent(self)
-
+function Layout:removeChild(c)
+    Panel:removeChild(self, c)
     self:reflow()
 end
 
