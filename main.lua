@@ -95,7 +95,6 @@ local function createButton()
 end
 
 function love.load()
-    love.window.setTitle('ne0luv panel refactor playground')
     w, h = love.graphics.getDimensions()
     root = neoluv.RowLayout({
         size = { w = w, h = h },
