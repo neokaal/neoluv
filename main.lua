@@ -27,6 +27,11 @@ end
 function love.load()
     love.window.setTitle('ne0luv panel refactor playground')
     w, h = love.graphics.getDimensions()
+    root = ne0luv.RowLayout({
+        size = { w = w, h = h },
+    }, {
+        bgColor = { 0.1, 0.1, 0.1, 0.85 }
+    })
 end
 
 function love.update(dt)
