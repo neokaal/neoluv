@@ -5,12 +5,14 @@ local statusText
 local w, h
 local samples = {}
 
-local function addSample(samplePanel, name, description)
+local function addSample(parent, samplePanel, name, description)
     if samplePanel == nil then
         error("sample panel is nil")
     end
     name = name or "noname"
     description = description or "none"
+
+    parent:addChild(samplePanel)
 
     table.insert(samples, {
         name = name,
