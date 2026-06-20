@@ -4,24 +4,93 @@ local root
 local statusText
 local w, h
 local samples = {}
+local sidePanel
+local sampleContainerPanel
+local currentSamplePanel = nil
+local currentSampleButton = nil
 
-local function addSample(parent, samplePanel, name, description)
+local function addSample(samplePanel, name, description)
     if samplePanel == nil then
         error("sample panel is nil")
     end
-    name = name or "noname"
-    description = description or "none"
+    name               = name or "noname"
+    description        = description or "none"
 
-    parent:addChild(samplePanel)
+    local sampleButton = ne0luv.Button({
+        size = { w = sidePanel:getWidth(), h = 32 },
+        margin = { 2, 2 },
+        border = 2,
+        padding = 2,
+        borderColor = { 0.1, 0.1, 0.1, 1 }
+    }, {
+        text = name,
+        align = "center",
+        onActivate = function(btn)
+            if currentSamplePanel and currentSampleButton then
+                currentSamplePanel:hide()
+                currentSampleButton.displayConfig.borderColor = { 0.1, 0.1, 0.1, 1 }
+            end
+            currentSamplePanel = samplePanel
+            currentSamplePanel:show()
+            currentSampleButton = btn
+            currentSampleButton.displayConfig.borderColor = { 1, 0, 0, 1 }
+        end
+    })
+
+    sampleContainerPanel:addChild(samplePanel)
+    samplePanel:hide()
+    sidePanel:addChild(sampleButton)
+    if currentSamplePanel == nil then
+        currentSampleButton = sampleButton
+        sampleButton.onActivate(sampleButton)
+    end
 
     table.insert(samples, {
         name = name,
-        description = description,
-        onActivate = function()
-            samplePanel.show()
-        end,
-        onDeactivate = function()
-            samplePanel.hide()
+        description = description
+    })
+end
+
+local function createSidePanel()
+    return ne0luv.ColumnLayout({
+        size = { w = w / 3.0, h = h },
+    }, {
+        bgColor = { 0.1, 0.1, 0.1, 0.85 }
+    })
+end
+
+local function createSampleContainerPanel()
+    -- TODO: investigate why Panel doesn't work here.
+    return ne0luv.ColumnLayout({
+        size = { w = w * 2.0 / 3.0, h = h },
+    }, {
+        bgColor = { 0.1, 0.1, 0.1, 0.85 }
+    })
+end
+
+local function createTextLabel()
+    return ne0luv.Text({
+        size = { w = 280, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
+    }, {
+        text = 'This is a simple text label',
+        borderColor = { 0, 0, 0, 1 }
+    })
+end
+
+local function createButton()
+    return ne0luv.Button({
+        size = { w = 180, h = 32 },
+        margin = { 2, 10 },
+        border = 1,
+        padding = 2
+    }, {
+        text = 'Activate (0)',
+        onActivate = function(btn)
+            btn.clickCount = (btn.clickCount or 0) + 1
+            btn.displayConfig.text = 'Activate (' .. tostring(btn.clickCount) .. ')'
         end
     })
 end
@@ -34,6 +103,14 @@ function love.load()
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
     })
+
+    sidePanel = createSidePanel()
+    sampleContainerPanel = createSampleContainerPanel()
+    root:addChild(sidePanel)
+    root:addChild(sampleContainerPanel)
+
+    addSample(createTextLabel(), "Text Label")
+    addSample(createButton(), "Simple Button")
 end
 
 function love.update(dt)
@@ -65,37 +142,6 @@ function love.keypressed(key)
 end
 
 local function createDefaultDemoPanel()
-    local title = ne0luv.Text({
-        size = { w = 280, h = 32 },
-        margin = { 2, 10 },
-        border = 1,
-        padding = 2
-    }, {
-        text = 'Panel local coordinates demo',
-        borderColor = { 0, 0, 0, 1 }
-    })
-
-    statusText = ne0luv.Text({
-        size = { w = 280, h = 24 },
-        margin = { 2, 10 },
-        border = 1,
-        padding = 2
-    }, {
-        text = 'Click the button or drag the slider'
-    })
-
-    local button = ne0luv.Button({
-        size = { w = 180, h = 32 },
-        margin = { 2, 10 },
-        border = 1,
-        padding = 2
-    }, {
-        text = 'Activate',
-        onActivate = function()
-            statusText:setText('Button activated')
-        end
-    })
-
     local slider = ne0luv.Slider({
         size = { w = 220, h = 24 },
         margin = { 2, 10 },
@@ -173,10 +219,8 @@ local function createDefaultDemoPanel()
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
     })
 
-    root:addChild(title)
     root:addChild(statusText)
     root:addChild(nestedRow)
-    root:addChild(button)
     root:addChild(slider)
     root:addChild(panelWithBorder)
 end
