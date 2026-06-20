@@ -123,12 +123,8 @@ function Panel:initialize(layoutConfig, displayConfig)
     self.padding = Quad:normalize_quad(layoutConfig, 'padding')
 
     self.displayConfig = displayConfig or {}
-    if not self.displayConfig.borderColor then
-        self.displayConfig.borderColor = { 0, 0, 0, 1 }
-    end
-    if not self.displayConfig.bgColor then
-        self.displayConfig.bgColor = { 0, 0, 0, 0.1 }
-    end
+    self.displayConfig.borderColor = self.displayConfig.borderColor or { 0, 0, 0, 1 }
+    self.displayConfig.bgColor = self.displayConfig.bgColor or { 0, 0, 0, 0.1 }
     self.parent = nil
     self.shown = true
 
@@ -164,6 +160,11 @@ function Panel:removeChild(c)
     end
 end
 
+-- Get children
+function Panel:getChildren()
+    return self.children
+end
+
 -- Lifecycle methods
 function Panel:show()
     self.shown = true
@@ -174,7 +175,10 @@ function Panel:hide()
 end
 
 function Panel:update(dt)
-    -- Code to update the panel
+    -- Iterate over child components and update them
+    for _, child in ipairs(self.children) do
+        child:update(dt)
+    end
 end
 
 --- Draw the panel in its canvas coordinate space.
@@ -235,12 +239,23 @@ function Panel:draw()
     end
 end
 
---- Code to draw the panel
+-- Override the _draw method
 function Panel:_draw()
+    local canvasRect = self:getCanvasRect()
+    -- Draw the background
+    love.graphics.setColor(self.displayConfig.bgColor)
+    love.graphics.rectangle('fill', 0, 0, canvasRect:getWidth(), canvasRect:getHeight())
+    -- Iterate over child components and draw them
+    for _, child in ipairs(self.children) do
+        child:draw()
+    end
 end
 
 function Panel:keypressed(key)
-    -- Code to handle key press
+    -- Iterate over child components and pass the keypress event
+    for _, child in ipairs(self.children) do
+        child:keypressed(key)
+    end
 end
 
 --- Convert a point from parent-space coordinates into panel-local
@@ -282,9 +297,6 @@ function Panel:mousepressed(x, y, button, istouch, presses)
     end
 end
 
-function Panel:_mousepressed(x, y, button, istouch, presses)
-end
-
 function Panel:mousereleased(x, y, button, istouch, presses)
     if not self.shown then
         return
@@ -299,9 +311,6 @@ function Panel:mousereleased(x, y, button, istouch, presses)
         local localX, localY = self:toLocalPoint(x, y)
         self:_mousereleased(localX, localY, button, istouch, presses)
     end
-end
-
-function Panel:_mousereleased(x, y, button, istouch, presses)
 end
 
 function Panel:mousemoved(x, y, dx, dy, istouch)
@@ -322,10 +331,38 @@ function Panel:mousemoved(x, y, dx, dy, istouch)
     end
 end
 
-function Panel:_mousemoved(x, y, dx, dy, istouch)
+-- Override the mousepressed method
+function Panel:_mousepressed(x, y, button, istouch, presses)
+    -- print("Layout:_mousepressed [" .. x .. ", " .. y .. "]")
+    -- Iterate over child components and pass the mousepress event
+    for _, child in ipairs(self.children) do
+        child:mousepressed(x, y, button, istouch, presses)
+    end
 end
 
+-- Override the mousereleased method
+function Panel:_mousereleased(x, y, button, istouch, presses)
+    -- Iterate over child components and pass the mouserelease event
+    for _, child in ipairs(self.children) do
+        child:mousereleased(x, y, button, istouch, presses)
+    end
+end
+
+-- Override the mousemoved method
+function Panel:_mousemoved(x, y, dx, dy, istouch)
+    -- print("Layout:_mousemoved [" .. x .. ", " .. y .. "]")
+    -- Iterate over child components and pass the mousemove event
+    for _, child in ipairs(self.children) do
+        child:mousemoved(x, y, dx, dy, istouch)
+    end
+end
+
+-- Override the mouseout method
 function Panel:_mouseout()
+    -- Iterate over child components and pass the mouseout event
+    for _, child in ipairs(self.children) do
+        child:_mouseout()
+    end
 end
 
 function Panel:getWidth()

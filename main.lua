@@ -60,8 +60,7 @@ local function createSidePanel()
 end
 
 local function createSampleContainerPanel()
-    -- TODO: investigate why Panel doesn't work here.
-    return neoluv.ColumnLayout({
+    return neoluv.Panel({
         size = { w = w * 2.0 / 3.0, h = h },
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
