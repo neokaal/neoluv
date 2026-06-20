@@ -1,4 +1,4 @@
-local ne0luv = require('.')
+local neoluv = require('.')
 
 local root
 local statusText
@@ -16,7 +16,7 @@ local function addSample(samplePanel, name, description)
     name               = name or "noname"
     description        = description or "none"
 
-    local sampleButton = ne0luv.Button({
+    local sampleButton = neoluv.Button({
         size = { w = sidePanel:getWidth(), h = 32 },
         margin = { 2, 2 },
         border = 2,
@@ -52,7 +52,7 @@ local function addSample(samplePanel, name, description)
 end
 
 local function createSidePanel()
-    return ne0luv.ColumnLayout({
+    return neoluv.ColumnLayout({
         size = { w = w / 3.0, h = h },
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
@@ -61,7 +61,7 @@ end
 
 local function createSampleContainerPanel()
     -- TODO: investigate why Panel doesn't work here.
-    return ne0luv.ColumnLayout({
+    return neoluv.ColumnLayout({
         size = { w = w * 2.0 / 3.0, h = h },
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
@@ -69,7 +69,7 @@ local function createSampleContainerPanel()
 end
 
 local function createTextLabel()
-    return ne0luv.Text({
+    return neoluv.Text({
         size = { w = 280, h = 32 },
         margin = { 2, 10 },
         border = 1,
@@ -81,7 +81,7 @@ local function createTextLabel()
 end
 
 local function createButton()
-    return ne0luv.Button({
+    return neoluv.Button({
         size = { w = 180, h = 32 },
         margin = { 2, 10 },
         border = 1,
@@ -98,7 +98,7 @@ end
 function love.load()
     love.window.setTitle('ne0luv panel refactor playground')
     w, h = love.graphics.getDimensions()
-    root = ne0luv.RowLayout({
+    root = neoluv.RowLayout({
         size = { w = w, h = h },
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
@@ -142,7 +142,7 @@ function love.keypressed(key)
 end
 
 local function createDefaultDemoPanel()
-    local slider = ne0luv.Slider({
+    local slider = neoluv.Slider({
         size = { w = 220, h = 24 },
         margin = { 2, 10 },
         border = 1,
@@ -157,13 +157,13 @@ local function createDefaultDemoPanel()
         statusText:setText(string.format('Slider value: %.0f', value))
     end)
 
-    local nestedRow = ne0luv.RowLayout({
+    local nestedRow = neoluv.RowLayout({
         size = { w = 500, h = 32 },
     }, {
         bgColor = { 0.18, 0.18, 0.24, 0.9 }
     })
 
-    local nestedLabel = ne0luv.Text({
+    local nestedLabel = neoluv.Text({
         size = { w = 120, h = 32 },
         margin = { 2, 10 },
         border = 1,
@@ -173,7 +173,7 @@ local function createDefaultDemoPanel()
     })
 
     local imgBtnPng = love.graphics.newImage('assets/images/img-button.png')
-    local nestedImgButton = ne0luv.ImageButton({
+    local nestedImgButton = neoluv.ImageButton({
         size = { w = 64, h = 32 },
     }, {
         image = imgBtnPng,
@@ -186,7 +186,7 @@ local function createDefaultDemoPanel()
         end,
     })
 
-    local nestedButton = ne0luv.Button({
+    local nestedButton = neoluv.Button({
         size = { w = 120, h = 32 },
         margin = { 2, 10 },
         border = 1,
@@ -203,7 +203,7 @@ local function createDefaultDemoPanel()
     nestedRow:addChild(nestedButton)
     nestedRow:addChild(nestedImgButton)
 
-    local panelWithBorder = ne0luv.Panel({
+    local panelWithBorder = neoluv.Panel({
         size = { w = 100, h = 100 },
         margin = { 2, 4 },
         border = { 3, 6 },
@@ -213,7 +213,7 @@ local function createDefaultDemoPanel()
         bgColor = { 0, 1, 0, 1 }
     })
 
-    root = ne0luv.ColumnLayout({
+    root = neoluv.ColumnLayout({
         size = { w = w, h = h },
     }, {
         bgColor = { 0.1, 0.1, 0.1, 0.85 }
