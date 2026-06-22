@@ -1,3 +1,12 @@
+---
+-- This is a Love2D application that demonstrates the various UI components
+-- available in the neoluv library.
+--
+-- @module neoluv.Demo
+-- @author Abhishek Mishra
+-- @copyright Copyright (c) 2026 Neokaal Tech Private Limited
+-- @license MIT
+
 local neoluv = require('.')
 
 local root
