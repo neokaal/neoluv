@@ -1,6 +1,6 @@
 # ne0luv
 
-Love2d UI, state management, math and miscellaneous utilities.
+Love2d UI, math and miscellaneous utilities.
 
 The utilities are implemented as reusable classes using the excellent [middleclass](https://github.com/kikito/middleclass) library.
 
