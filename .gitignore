@@ -41,3 +41,6 @@ luac.out
 
 # macos temp files
 .DS_Store
+
+# lua env directory
+.luaenv
