@@ -1,4 +1,4 @@
-# ne0luv
+# Neoluv
 
 Reusable UI, math, and utility components for Love2D.
 

@@ -1,6 +1,6 @@
 project = "Neoluv"
 title = "Neoluv documentation"
-description = "Neoluv is a utility library Love2d UI, math and miscellaneous tools"
+description = "Neoluv: Reusable UI, math, and utility components for Love2D."
 format = "discount"
 backtick_references = false
 readme = "README.md"
